@@ -21,7 +21,7 @@
   function toLogin() {
     var here = location.pathname + location.search;
     var loginUrl = (location.pathname.indexOf('/training/') > -1 || location.pathname.indexOf('/gm_insights/') > -1)
-      ? '../login.html' : '/login.html';
+      ? '../login.html' : 'login.html';
     location.href = loginUrl + '?next=' + encodeURIComponent(here);
   }
 
@@ -50,7 +50,7 @@
   function init() {
     // 登录页和管理页跳过鉴权
     var path = location.pathname;
-    if (path.endsWith('login.html') || path.endsWith('admin.html')) return;
+    if (path.endsWith('login.html') || path.endsWith('admin.html') || path === '/admin') return;
 
     var token = getToken();
     if (!token) { toLogin(); return; }
@@ -79,7 +79,7 @@
   // ── 全局退出登录 ──────────────────────────────────────────────────
   window.brainLogout = function () {
     clearToken();
-    location.href = location.pathname.indexOf('/training/') > -1 ? '../login.html' : '/login.html';
+    location.href = location.pathname.indexOf('/training/') > -1 ? '../login.html' : 'login.html';
   };
 
   document.addEventListener('DOMContentLoaded', init);
