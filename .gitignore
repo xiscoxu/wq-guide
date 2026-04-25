@@ -1,0 +1,14 @@
+# 未加密的原始 HTML 源文件 — 不得提交到公开仓库
+plain/
+
+# 构建脚本和服务器代码 — 不得提交到公开仓库
+scripts/
+server/
+admin.html
+
+# 敏感文档和日志
+docs/
+mcp_server.log
+.DS_Store
+.playwright-mcp/
+*.zip
