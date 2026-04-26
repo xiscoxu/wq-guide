@@ -119,6 +119,7 @@ function doLogin(e) {
       sessionStorage.setItem('brain_token', d.token);
       sessionStorage.setItem('brain_user', d.username);
       sessionStorage.setItem('brain_role', d.role);
+      sessionStorage.setItem('brain_wq_status', d.wq_status || '');
       // admin 用户始终跳转到后台管理页
       if (d.role === 'admin') {
         location.href = 'https://brainauth.shop/admin';

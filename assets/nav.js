@@ -330,10 +330,19 @@
     var right = document.querySelector('.topbar-right');
     if (!right || document.querySelector('.user-menu')) return;
 
-    var username = sessionStorage.getItem('brain_user') || '用户';
-    var role     = sessionStorage.getItem('brain_role') || 'user';
-    var initial  = username.charAt(0).toUpperCase();
-    var roleLabel = role === 'admin' ? '管理员' : '顾问';
+    var username  = sessionStorage.getItem('brain_user') || '用户';
+    var role      = sessionStorage.getItem('brain_role') || 'user';
+    var wqStatus  = sessionStorage.getItem('brain_wq_status') || '';
+    var initial   = username.charAt(0).toUpperCase();
+
+    var WQ_STATUS_LABELS = {
+      'consultant':             '顾问',
+      'conditional_consultant': '有条件顾问',
+      'user':                   '用户',
+    };
+    var roleLabel = role === 'admin'
+      ? '管理员'
+      : (WQ_STATUS_LABELS[wqStatus] || '用户');
 
     var wrap = document.createElement('div');
     wrap.className = 'user-menu';
