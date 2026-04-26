@@ -31,16 +31,39 @@
       if (!html) throw new Error('decrypt failed');
       wrapper.innerHTML = html;
       // 重新执行注入内容中的 script 标签（innerHTML 不会自动执行脚本）
-      wrapper.querySelectorAll('script').forEach(function(s) {
+      // 对外部脚本（src）等所有加载完成后再调 navInit，避免 PAGE_SECTIONS 等全局变量未就绪
+      var scripts = Array.from(wrapper.querySelectorAll('script'));
+      var extScripts = [];
+      scripts.forEach(function(s) {
         var ns = document.createElement('script');
-        if (s.src) { ns.src = s.src; } else { ns.textContent = s.textContent; }
+        if (s.src) {
+          ns.src = s.src;
+          extScripts.push(ns);
+        } else {
+          ns.textContent = s.textContent;
+        }
         document.head.appendChild(ns);
-        document.head.removeChild(ns);
+        if (!s.src) document.head.removeChild(ns);
       });
+
       var mc = document.getElementById('main-content');
       if (mc) mc.style.display = 'block';
-      // 解密注入 DOM 后重新初始化 nav.js（sidebar 激活、滚动监听等）
-      if (typeof window.navInit === 'function') window.navInit();
+
+      // 等所有外部脚本加载完再初始化
+      if (extScripts.length === 0) {
+        if (typeof window.navInit === 'function') window.navInit();
+      } else {
+        var loaded = 0;
+        extScripts.forEach(function(ns) {
+          ns.onload = ns.onerror = function() {
+            loaded++;
+            if (loaded === extScripts.length) {
+              extScripts.forEach(function(n) { document.head.removeChild(n); });
+              if (typeof window.navInit === 'function') window.navInit();
+            }
+          };
+        });
+      }
     } catch (e) {
       document.body.innerHTML = '<p style="color:red;padding:40px">内容解密失败，请重新登录</p>';
       clearToken();
