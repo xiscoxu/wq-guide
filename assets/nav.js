@@ -20,6 +20,21 @@
   }
 
   // ── 侧边栏滚动高亮当前章节 ──
+  function getSidebarItemLabel(a) {
+    // 取文本内容，去掉数字编号前缀（si-num span）
+    var clone = a.cloneNode(true);
+    var num = clone.querySelector('.si-num');
+    if (num) num.remove();
+    var prog = clone.querySelector('.prog-check');
+    if (prog) prog.remove();
+    return clone.textContent.trim();
+  }
+
+  function updateTopbarBadge(label) {
+    var badge = document.querySelector('.topbar-badge');
+    if (badge && label) badge.textContent = label;
+  }
+
   function initScrollSpy() {
     var items = document.querySelectorAll('.sidebar-item[href^="#"]');
     if (!items.length) return;
@@ -37,6 +52,7 @@
       items.forEach(function (a, i) {
         a.classList.toggle('active', i === current);
       });
+      updateTopbarBadge(getSidebarItemLabel(items[current]));
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });

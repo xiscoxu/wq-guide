@@ -347,8 +347,7 @@ footer a { color: var(--muted); }
 
 /* ── 搜索框 ── */
 .search-wrap {
-  position: relative;
-  flex-shrink: 0;
+  display: none;
 }
 .search-input {
   padding: 5px 12px 5px 28px;
