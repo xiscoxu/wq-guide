@@ -174,6 +174,13 @@
     var currentFile = location.pathname.split('/').pop().replace('.html', '') || 'index';
     var stored = JSON.parse(localStorage.getItem('brain_progress') || '{}');
 
+    // 只有在 PAGE_SECTIONS 中的培训页面才显示勾选框
+    if (!PAGE_SECTIONS[currentFile]) {
+      refreshProgressRing();
+      refreshHomepageProgress();
+      return;
+    }
+
     document.querySelectorAll('.sidebar-item[href^="#"]').forEach(function (a) {
       var section = a.getAttribute('href').replace('#', '');
       var check = document.createElement('span');
