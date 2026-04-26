@@ -325,6 +325,58 @@
     renderQuestion();
   }
 
+  // ── 用户菜单 ──────────────────────────────────────────────────────
+  function initUserMenu() {
+    var right = document.querySelector('.topbar-right');
+    if (!right || document.querySelector('.user-menu')) return;
+
+    var username = sessionStorage.getItem('brain_user') || '用户';
+    var role     = sessionStorage.getItem('brain_role') || 'user';
+    var initial  = username.charAt(0).toUpperCase();
+    var roleLabel = role === 'admin' ? '管理员' : '顾问';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'user-menu';
+    wrap.innerHTML =
+      '<button class="user-menu-btn" id="user-menu-toggle" aria-expanded="false">'
+      + '<div class="user-avatar">' + initial + '</div>'
+      + '<span class="user-name">' + username + '</span>'
+      + '<span class="user-chevron">▼</span>'
+      + '</button>'
+      + '<div class="user-dropdown">'
+      + '<div class="user-dropdown-header">'
+      + '<div class="user-dropdown-name">' + username + '</div>'
+      + '<div class="user-dropdown-role">' + roleLabel + '</div>'
+      + '</div>'
+      + '<button class="user-dropdown-item danger" id="user-logout-btn">退出登录</button>'
+      + '</div>';
+
+    right.appendChild(wrap);
+
+    document.getElementById('user-menu-toggle').addEventListener('click', function (e) {
+      e.stopPropagation();
+      wrap.classList.toggle('open');
+      this.setAttribute('aria-expanded', wrap.classList.contains('open'));
+    });
+
+    document.getElementById('user-logout-btn').addEventListener('click', function () {
+      if (typeof window.brainLogout === 'function') {
+        window.brainLogout();
+      } else {
+        sessionStorage.removeItem('brain_token');
+        location.href = location.pathname.indexOf('/training/') > -1
+          || location.pathname.indexOf('/gm_insights/') > -1
+          ? '../login.html' : 'login.html';
+      }
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest || !e.target.closest('.user-menu')) {
+        wrap.classList.remove('open');
+      }
+    });
+  }
+
   function navInit() {
     markActive();
     initScrollSpy();
@@ -333,6 +385,7 @@
     initSearch();
     initSiteProgress();
     initQuiz();
+    initUserMenu();
   }
 
   // 暴露给 auth.js，在解密注入 DOM 后调用
