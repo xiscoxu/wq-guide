@@ -35,6 +35,13 @@
       var html = dec.toString(CryptoJS.enc.Utf8);
       if (!html) throw new Error('decrypt failed');
       wrapper.innerHTML = html;
+      // 重新执行注入内容中的 script 标签（innerHTML 不会自动执行脚本）
+      wrapper.querySelectorAll('script').forEach(function(s) {
+        var ns = document.createElement('script');
+        if (s.src) { ns.src = s.src; } else { ns.textContent = s.textContent; }
+        document.head.appendChild(ns);
+        document.head.removeChild(ns);
+      });
       var mc = document.getElementById('main-content');
       if (mc) mc.style.display = 'block';
       // 解密注入 DOM 后重新初始化 nav.js（sidebar 激活、滚动监听等）
