@@ -77,7 +77,8 @@
   // ── 全局退出登录 ──────────────────────────────────────────────────
   window.brainLogout = function () {
     clearToken();
-    location.href = location.pathname.indexOf('/training/') > -1 ? '../login.html' : 'login.html';
+    var inSub = location.pathname.indexOf('/training/') > -1 || location.pathname.indexOf('/gm_insights/') > -1;
+    location.href = inSub ? '../login.html' : 'login.html';
   };
 
   document.addEventListener('DOMContentLoaded', init);
