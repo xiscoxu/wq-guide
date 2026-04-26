@@ -10,12 +10,7 @@
   function setToken(t) { sessionStorage.setItem('brain_token', t); }
   function clearToken() {
     sessionStorage.removeItem('brain_token');
-    sessionStorage.removeItem('brain_key');
   }
-
-  // ── 内容密钥缓存 ──────────────────────────────────────────────────
-  function getKey() { return sessionStorage.getItem('brain_key'); }
-  function setKey(k) { sessionStorage.setItem('brain_key', k); }
 
   // ── 跳转到登录页 ──────────────────────────────────────────────────
   function toLogin() {
@@ -62,9 +57,6 @@
     var token = getToken();
     if (!token) { toLogin(); return; }
 
-    var cachedKey = getKey();
-    if (cachedKey) { decryptPage(cachedKey); return; }
-
     var page = path.split('/').pop() || 'index.html';
     fetch(API + '/api/key?page=' + encodeURIComponent(page), {
       headers: { 'Authorization': 'Bearer ' + token }
@@ -75,7 +67,6 @@
     })
     .then(function (data) {
       if (!data) return;
-      setKey(data.key);
       decryptPage(data.key);
     })
     .catch(function () {
