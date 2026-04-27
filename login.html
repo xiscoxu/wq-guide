@@ -120,11 +120,6 @@ function doLogin(e) {
       sessionStorage.setItem('brain_user', d.username);
       sessionStorage.setItem('brain_role', d.role);
       sessionStorage.setItem('brain_wq_status', d.wq_status || '');
-      // admin 用户始终跳转到后台管理页
-      if (d.role === 'admin') {
-        location.href = 'https://brainauth.shop/admin';
-        return;
-      }
       var rawNext = new URLSearchParams(location.search).get('next') || '';
       // 只允许跳转到同源相对路径，防止开放重定向
       var next = (rawNext && rawNext.startsWith('/') && !rawNext.startsWith('//')) ? rawNext : 'index.html';
