@@ -43,6 +43,9 @@
 </head>
 <body>
 <div class="auth-box">
+  <div style="text-align:center;margin-bottom:16px;">
+    <a href="landing.html" style="font-size:12px;color:#8b949e;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#58a6ff'" onmouseout="this.style.color='#8b949e'">← 查看平台介绍</a>
+  </div>
   <div class="auth-logo">⚡</div>
   <div class="auth-title">BRAIN 培训中心</div>
   <div class="auth-sub">WorldQuant 顾问专属学习平台</div>
@@ -116,10 +119,10 @@ function doLogin(e) {
   .then(function(r) { return r.json(); })
   .then(function(d) {
     if (d.token) {
-      sessionStorage.setItem('brain_token', d.token);
-      sessionStorage.setItem('brain_user', d.username);
-      sessionStorage.setItem('brain_role', d.role);
-      sessionStorage.setItem('brain_wq_status', d.wq_status || '');
+      localStorage.setItem('brain_token', d.token);
+      localStorage.setItem('brain_user', d.username);
+      localStorage.setItem('brain_role', d.role);
+      localStorage.setItem('brain_wq_status', d.wq_status || '');
       var rawNext = new URLSearchParams(location.search).get('next') || '';
       // 只允许跳转到同源相对路径，防止开放重定向
       var next = (rawNext && rawNext.startsWith('/') && !rawNext.startsWith('//')) ? rawNext : 'index.html';
