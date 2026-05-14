@@ -116,22 +116,30 @@ function doLogin(e) {
       password: document.getElementById('l-pw').value
     })
   })
-  .then(function(r) { return r.json(); })
-  .then(function(d) {
+  .then(function(r) {
+    return r.json().then(function(d) { return { status: r.status, data: d }; });
+  })
+  .then(function(res) {
+    var d = res.data;
     if (d.token) {
       localStorage.setItem('brain_token', d.token);
       localStorage.setItem('brain_user', d.username);
       localStorage.setItem('brain_role', d.role);
       localStorage.setItem('brain_wq_status', d.wq_status || '');
+      msg.textContent = '登录成功，跳转中...'; msg.className = 'msg success';
       var rawNext = new URLSearchParams(location.search).get('next') || '';
       // 只允许跳转到同源相对路径，防止开放重定向
       var next = (rawNext && rawNext.startsWith('/') && !rawNext.startsWith('//')) ? rawNext : 'home.html';
       location.href = next;
     } else {
-      msg.textContent = d.detail || '登录失败'; msg.className = 'msg error';
+      msg.textContent = '[' + res.status + '] ' + (d.detail || d.message || '登录失败');
+      msg.className = 'msg error';
     }
   })
-  .catch(function() { msg.textContent = '无法连接服务器'; msg.className = 'msg error'; });
+  .catch(function(err) {
+    msg.textContent = '无法连接服务器：' + (err && err.message ? err.message : '网络错误');
+    msg.className = 'msg error';
+  });
 }
 
 function doRegister(e) {
