@@ -353,9 +353,9 @@
     var right = document.querySelector('.topbar-right');
     if (!right || document.querySelector('.user-menu')) return;
 
-    var username  = sessionStorage.getItem('brain_user') || '用户';
-    var role      = sessionStorage.getItem('brain_role') || 'user';
-    var wqStatus  = sessionStorage.getItem('brain_wq_status') || '';
+    var username  = localStorage.getItem('brain_user') || '用户';
+    var role      = localStorage.getItem('brain_role') || 'user';
+    var wqStatus  = localStorage.getItem('brain_wq_status') || '';
     var initial   = username.charAt(0).toUpperCase();
 
     var WQ_STATUS_LABELS = {
@@ -395,7 +395,7 @@
       if (typeof window.brainLogout === 'function') {
         window.brainLogout();
       } else {
-        sessionStorage.removeItem('brain_token');
+        localStorage.removeItem('brain_token');
         location.href = location.pathname.indexOf('/training/') > -1
           || location.pathname.indexOf('/gm_insights/') > -1
           ? '../login.html' : 'login.html';

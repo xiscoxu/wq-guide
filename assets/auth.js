@@ -6,10 +6,10 @@
   var LOGIN_PAGE = '/login.html';
 
   // ── Token 工具 ────────────────────────────────────────────────────
-  function getToken() { return sessionStorage.getItem('brain_token'); }
-  function setToken(t) { sessionStorage.setItem('brain_token', t); }
+  function getToken() { return localStorage.getItem('brain_token'); }
+  function setToken(t) { localStorage.setItem('brain_token', t); }
   function clearToken() {
-    sessionStorage.removeItem('brain_token');
+    localStorage.removeItem('brain_token');
   }
 
   // ── 跳转到登录页 ──────────────────────────────────────────────────
